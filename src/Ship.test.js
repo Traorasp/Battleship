@@ -11,3 +11,15 @@ test('Hit 3rd part of a ship', () => {
     [1, 1, 0],
   );
 });
+
+test('Check if isSunk works on sunken ships', () => {
+  const boat = createShip(2);
+  boat.hit(1);
+  boat.hit(2);
+  expect(boat.isSunk()).toBe(true);
+});
+
+test('Check if isSunk fails on ships that has not sunk', () => {
+  const boat = createShip(3);
+  expect(boat.isSunk()).toBe(false);
+});

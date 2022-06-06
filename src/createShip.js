@@ -8,9 +8,12 @@ const createShip = (size) => {
     ship[shot - 1] = 0;
   };
 
+  const isSunk = () => !ship.includes(1);
+
   return {
     ship,
     hit,
+    isSunk,
   };
 };
 
