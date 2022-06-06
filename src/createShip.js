@@ -5,7 +5,7 @@ const createShip = (size) => {
   }
 
   const hit = (shot) => {
-    cond[shot - 1] = 0;
+    cond[shot] = 0;
   };
 
   const isSunk = () => !cond.includes(1);

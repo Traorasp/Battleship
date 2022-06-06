@@ -16,9 +16,18 @@ const Gameboard = () => {
     }
   };
 
+  const receiveAttack = (x, y) => {
+    if (grid[x - 1][y - 1] !== 0) {
+      grid[x - 1][y - 1].ship.hit(grid[x - 1][y - 1].part);
+    } else {
+      grid[x - 1][y - 1] = -1;
+    }
+  };
+
   return {
     grid,
     placeShip,
+    receiveAttack,
   };
 };
 

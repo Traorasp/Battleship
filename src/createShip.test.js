@@ -6,7 +6,7 @@ test('creates a ship 3 long', () => {
 
 test('Hit 3rd part of a ship', () => {
   const boat = createShip(3);
-  boat.hit(3);
+  boat.hit(2);
   expect(boat.cond).toEqual(
     [1, 1, 0],
   );
@@ -14,8 +14,8 @@ test('Hit 3rd part of a ship', () => {
 
 test('Check if isSunk works on sunken ships', () => {
   const boat = createShip(2);
+  boat.hit(0);
   boat.hit(1);
-  boat.hit(2);
   expect(boat.isSunk()).toBe(true);
 });
 

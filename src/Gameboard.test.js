@@ -9,16 +9,21 @@ test('Can add ship 3 wide to board at cord (5,5)', () => {
   const board = Gameboard();
   board.placeShip([5, 6, 7], [5, 5, 5]);
   expect(board.grid[4][4].part).toBe(0);
-});
-
-test('Can add ship 3 wide to board at cord (5,5)', () => {
-  const board = Gameboard();
-  board.placeShip([5, 6, 7], [5, 5, 5]);
   expect(board.grid[5][4].part).toBe(1);
+  expect(board.grid[6][4].part).toBe(2);
 });
 
-test('Can add ship 3 wide to board at cord (5,5)', () => {
+test('Checks if received hit can hit a ship', () => {
   const board = Gameboard();
   board.placeShip([5, 6, 7], [5, 5, 5]);
-  expect(board.grid[6][4].part).toBe(2);
+  board.receiveAttack(6, 5);
+  expect(board.grid[5][4].ship.cond).toEqual([1, 0, 1]);
+  board.receiveAttack(7, 5);
+  expect(board.grid[6][4].ship.cond).toEqual([1, 0, 0]);
+});
+
+test('Checks if received hit can change spacec from 0 to -1', () => {
+  const board = Gameboard();
+  board.receiveAttack(6, 5);
+  expect(board.grid[5][4]).toBe(-1);
 });
