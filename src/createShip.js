@@ -1,17 +1,17 @@
 const createShip = (size) => {
-  const ship = [];
+  const cond = [];
   for (let i = 0; i < size; i += 1) {
-    ship.push(1);
+    cond.push(1);
   }
 
   const hit = (shot) => {
-    ship[shot - 1] = 0;
+    cond[shot - 1] = 0;
   };
 
-  const isSunk = () => !ship.includes(1);
+  const isSunk = () => !cond.includes(1);
 
   return {
-    ship,
+    cond,
     hit,
     isSunk,
   };
