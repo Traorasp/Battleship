@@ -27,3 +27,13 @@ test('Checks if received hit can change spacec from 0 to -1', () => {
   board.receiveAttack(6, 5);
   expect(board.grid[5][4]).toBe(-1);
 });
+
+test('Checks if allSunken works when there are no ships', () => {
+  expect(Gameboard().allSunk()).toBe(true);
+});
+
+test('Checks if allSunken works when one ship remains', () => {
+  const board = Gameboard();
+  board.placeShip([3, 3], [3, 4]);
+  expect(board.allSunk()).toBe(false);
+});

@@ -24,10 +24,23 @@ const Gameboard = () => {
     }
   };
 
+  const allSunk = () => {
+    let noShips = true;
+    grid.forEach((col) => {
+      col.forEach((val) => {
+        if (val !== 0 && val !== -1) {
+          noShips = false;
+        }
+      });
+    });
+    return noShips;
+  };
+
   return {
     grid,
     placeShip,
     receiveAttack,
+    allSunk,
   };
 };
 
