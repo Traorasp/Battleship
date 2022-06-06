@@ -16,12 +16,19 @@ const Gameboard = () => {
     }
   };
 
-  const receiveAttack = (x, y) => {
-    if (grid[x - 1][y - 1] !== 0) {
-      grid[x - 1][y - 1].ship.hit(grid[x - 1][y - 1].part);
-    } else {
-      grid[x - 1][y - 1] = -1;
+  const receiveAttack = (xCord, yCord) => {
+    const x = xCord - 1;
+    const y = yCord - 1;
+
+    if (grid[x][y] === -1 || (grid[x][y] !== 0 && grid[x][y].ship.cond[grid[x][y].part] === 0)) {
+      return false;
     }
+    if (grid[x][y] !== 0) {
+      grid[x][y].ship.hit(grid[x][y].part);
+    } else {
+      grid[x][y] = -1;
+    }
+    return true;
   };
 
   const allSunk = () => {
