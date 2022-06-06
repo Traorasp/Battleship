@@ -1,9 +1,7 @@
-import ship from './Ship';
+import createShip from './createShip';
 
-test('creates a ship 3 long with x[1,2,3] and y[1, 1 ,1]', () => {
-  expect(ship(3, [1, 2, 3], [1, 1, 1])).toEqual({
-    size: 3,
-    x: [1, 2, 3],
-    y: [1, 1, 1],
+test('creates a ship 3 long', () => {
+  expect(createShip(3)).toEqual({
+    ship: [1, 1, 1],
   });
 });

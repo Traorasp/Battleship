@@ -7,7 +7,7 @@ module.exports = {
     Battleship: './src/Battleship.js',
     Gameboard: './src/Gameboard.js',
     Player: './src/Player.js',
-    Ship: './src/Ship.js',
+    Ship: './src/createShip.js',
   },
   devtool: 'inline-source-map',
   devServer: {
