@@ -7,7 +7,8 @@ module.exports = {
     Battleship: './src/Battleship.js',
     Gameboard: './src/Gameboard.js',
     Player: './src/Player.js',
-    Ship: './src/createShip.js',
+    createShip: './src/createShip.js',
+    gameloop: './src/gameloop.js',
   },
   devtool: 'inline-source-map',
   devServer: {
@@ -37,19 +38,13 @@ module.exports = {
         type: 'asset/resource',
       },
     ],
-    loaders: [
-      { exclude: ['node_modules'], loader: 'babel', test: /\.jsx?$/ },
-      { loader: 'style-loader!css-loader', test: /\.css$/ },
-      { loader: 'url-loader', test: /\.gif$/ },
-      { loader: 'file-loader', test: /\.(ttf|eot|svg)$/ },
-    ],
   },
   resolve: {
     alias: {
       config$: './configs/app-config.js',
       react: './vendor/react-master',
     },
-    extensions: ['', 'js', 'jsx'],
+    extensions: ['', '.js', '.jsx'],
     modules: [
       'node_modules',
       'bower_components',

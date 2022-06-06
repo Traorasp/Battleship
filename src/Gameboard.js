@@ -1,4 +1,4 @@
-import createShip from './createShip';
+import createShip from './createShip.js';
 
 const Gameboard = () => {
   const grid = [];
