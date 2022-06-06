@@ -12,7 +12,7 @@ const Gameboard = () => {
   const placeShip = (x, y) => {
     const ship = createShip(x.length);
     for (let i = 0; i < x.length; i += 1) {
-      grid[x[i] - 1][y[1] - 1] = { ship, part: i };
+      grid[x[i] - 1][y[i] - 1] = { ship, part: i };
     }
   };
 
@@ -28,7 +28,7 @@ const Gameboard = () => {
     let noShips = true;
     grid.forEach((col) => {
       col.forEach((val) => {
-        if (val !== 0 && val !== -1) {
+        if (val !== 0 && val !== -1 && !val.ship.isSunk()) {
           noShips = false;
         }
       });

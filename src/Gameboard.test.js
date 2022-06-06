@@ -34,6 +34,8 @@ test('Checks if allSunken works when there are no ships', () => {
 
 test('Checks if allSunken works when one ship remains', () => {
   const board = Gameboard();
-  board.placeShip([3, 3], [3, 4]);
+  board.placeShip([3], [3]);
   expect(board.allSunk()).toBe(false);
+  board.receiveAttack(3, 3);
+  expect(board.allSunk()).toBe(true);
 });
