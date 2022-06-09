@@ -17,9 +17,9 @@ test('Checks if received hit can hit a ship', () => {
   const board = Gameboard();
   board.placeShip([5, 6, 7], [5, 5, 5]);
   board.receiveAttack(6, 5);
-  expect(board.grid[5][4].ship.cond).toEqual([1, 0, 1]);
+  expect(board.grid[6][4].ship.cond).toEqual([1, 0, 1]);
   board.receiveAttack(7, 5);
-  expect(board.grid[6][4].ship.cond).toEqual([1, 0, 0]);
+  expect(board.grid[4][4].ship.cond).toEqual([1, 0, 0]);
 });
 
 test('Checks if received hit can change spacec from 0 to -1', () => {
@@ -38,4 +38,24 @@ test('Checks if allSunken works when one ship remains', () => {
   expect(board.allSunk()).toBe(false);
   board.receiveAttack(3, 3);
   expect(board.allSunk()).toBe(true);
+});
+
+test('Checks if cell status works on ships', () => {
+  const board = Gameboard();
+  board.placeShip([3], [3]);
+  expect(board.cellStatus(3, 3)).toBe(1);
+});
+
+test('Checks if cell status works on a sunken cell', () => {
+  const board = Gameboard();
+  board.placeShip([1, 1], [1, 2]);
+  board.receiveAttack(1, 1);
+  expect(board.cellStatus(1, 1)).toBe(-2);
+});
+
+test('Checks if cell status works on sunken ships', () => {
+  const board = Gameboard();
+  board.placeShip([3], [3]);
+  board.receiveAttack(3, 3);
+  expect(board.cellStatus(3, 3)).toBe(-3);
 });
