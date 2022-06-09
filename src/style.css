@@ -21,8 +21,6 @@
     grid-auto-flow: column;
 }
 
-
-
 .x-cord div, .y-cord div, .grid div{
     box-sizing: border-box;
     width: 50px;
@@ -37,4 +35,16 @@
 
 .grid div {
     border: solid black 3px;
+}
+
+.miss {
+    background-color: gray;
+}
+
+.sunk-part {
+    background-color: red;
+}
+
+.sunk { 
+    background-color: black;
 }

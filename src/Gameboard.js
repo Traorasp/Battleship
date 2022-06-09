@@ -57,11 +57,13 @@ const Gameboard = () => {
     return noShips;
   };
 
-  const cellStatus = (x, y) => {
-    if (grid[x - 1][y - 1].ship.isSunk()) return -3;
-    if (grid[x - 1][y - 1].part === -2) return -2;
-    if (typeof grid[x - 1][y - 1] === 'object') return 1;
-    return grid[x - 1][y - 1];
+  const cellStatus = (xCord, yCord) => {
+    const x = xCord - 1;
+    const y = yCord - 1;
+    if (typeof grid[x][y] === 'object' && grid[x][y].ship.isSunk()) return -3;
+    if (grid[x][y].part === -2) return -2;
+    if (typeof grid[x][y] === 'object') return 1;
+    return grid[x][y];
   };
 
   return {

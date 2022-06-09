@@ -6,7 +6,9 @@ const Player = (enemyBoard) => {
   const attack = (x, y) => {
     if (turn) {
       turn = !enemyBoard.receiveAttack(x, y);
+      if (!turn) return turn;
     }
+    return true;
   };
 
   const isTurn = () => {
@@ -14,11 +16,14 @@ const Player = (enemyBoard) => {
   };
 
   const aiMove = () => {
-    if (turn) {
-      const x = Math.floor(Math.random() * 10) + 1;
-      const y = Math.floor(Math.random() * 10) + 1;
-      turn = enemyBoard.receiveAttack(x, y);
+    let x;
+    let y;
+    while (turn) {
+      x = Math.floor(Math.random() * 10) + 1;
+      y = Math.floor(Math.random() * 10) + 1;
+      turn = !enemyBoard.receiveAttack(x, y);
     }
+    return [x, y];
   };
 
   return {
