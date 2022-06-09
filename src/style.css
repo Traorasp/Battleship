@@ -42,9 +42,9 @@
 }
 
 .sunk-part {
-    background-color: red;
+    background-color: yellow;
 }
 
 .sunk { 
-    background-color: black;
+    background-color: red;
 }
