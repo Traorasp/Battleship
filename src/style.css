@@ -1,0 +1,40 @@
+.board {
+    display: grid;
+    grid-template: repeat(11, 50px) / repeat(11, 50px);
+    margin-bottom: 100px;
+}
+
+.x-cord {
+    grid-area: 1 / 1 / 2 / 11;
+    display: grid;
+    grid-auto-flow: column;
+}
+
+.y-cord {
+    grid-area: 2 / 1 / 11 / 2;
+}
+
+.grid {
+    grid-area: 2 / 2 / 12 / 12;
+    display: grid;
+    grid-template: repeat(10, 50px) / repeat(10, 50px);;
+    grid-auto-flow: column;
+}
+
+
+
+.x-cord div, .y-cord div, .grid div{
+    box-sizing: border-box;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2em;
+    font-weight: bold;
+    border: solid rgb(218, 218, 218) 3px;
+}
+
+.grid div {
+    border: solid black 3px;
+}

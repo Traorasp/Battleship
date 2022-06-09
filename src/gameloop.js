@@ -37,9 +37,9 @@ const gameloop = (() => {
     boardXCord.classList.add('x-cord');
     board.appendChild(boardXCord);
 
-    for (let i = 0; i <= 10; i += 1) {
+    for (let a = 0; a <= 10; a += 1) {
       const cord = document.createElement('div');
-      cord.textcontent = i === 0 ? '' : `${i}`;
+      cord.innerText = a === 0 ? '0' : `${a}`;
       boardXCord.appendChild(cord);
     }
 
@@ -47,20 +47,23 @@ const gameloop = (() => {
     boardYCord.classList.add('y-cord');
     board.appendChild(boardYCord);
 
-    for (let k = 1; k < 10; k += 1) {
+    for (let k = 1; k <= 10; k += 1) {
       const cord = document.createElement('div');
-      cord.textcontent = `${k}`;
+      cord.innerText = `${k}`;
       boardYCord.appendChild(cord);
     }
+
+    const grid = document.createElement('div');
+    grid.classList.add('grid');
+    board.appendChild(grid);
 
     for (let x = 1; x <= 10; x += 1) {
       for (let y = 1; y <= 10; y += 1) {
         const cell = document.createElement('div');
-        cell.classList.add(`${x}`, `${y}`);
-        board.appendChild(cell);
+        cell.classList.add(`X${x}`, `Y${y}`);
+        grid.appendChild(cell);
         cell.addEventListener('click', (e) => {
-          console.log(e.target.classList[0]);
-          console.log(e.target.classList[1]);
+          console.log(`${e.target.classList[0].slice(1)} ${e.target.classList[1].slice(1)}`);
         });
       }
     }
