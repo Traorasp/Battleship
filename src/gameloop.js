@@ -43,21 +43,8 @@ const gameloop = (() => {
   };
 
   const enterDroppable = (droppable, onShip) => {
-    let shift;
-    switch (onShip.classList[0]) {
-      case 'carrier':
-        shift = 100;
-        break;
-      case 'battleship':
-      case 'cruiser':
-        shift = 50;
-        break;
-      default:
-        shift = 0;
-        break;
-    }
     onShip.style.left = `${droppable.getBoundingClientRect().x}px`;
-    onShip.style.top = `${droppable.getBoundingClientRect().y - shift}px`;
+    onShip.style.top = `${droppable.getBoundingClientRect().y}px`;
     onShip.classList.add('placed');
   };
 
@@ -100,8 +87,6 @@ const gameloop = (() => {
 
     moveAt(event.pageX, event.pageY);
 
-    // moves the ball at (pageX, pageY) coordinates
-    // taking initial shifts into account
     function moveAt(pageX, pageY) {
       onShip.style.left = `${pageX - shiftX}px`;
       onShip.style.top = `${pageY - shiftY}px`;
@@ -119,7 +104,7 @@ const gameloop = (() => {
       document.removeEventListener('mousemove', onMouseMove);
       onShip.onmouseup = null;
       const xLoc = Math.round(25 + onShip.getBoundingClientRect().left);
-      const yLoc = shift + onShip.getBoundingClientRect().top;
+      const yLoc = 25 + onShip.getBoundingClientRect().top;
       onShip.hidden = true;
       const elemBelow = document.elementFromPoint(xLoc, yLoc);
       onShip.hidden = false;
