@@ -40,7 +40,6 @@ const gameloop = (() => {
   };
 
   const leaveDroppable = (droppable, onShip) => {
-
   };
 
   const enterDroppable = (droppable, onShip) => {
@@ -59,6 +58,7 @@ const gameloop = (() => {
     }
     onShip.style.left = `${droppable.getBoundingClientRect().x}px`;
     onShip.style.top = `${droppable.getBoundingClientRect().y - shift}px`;
+    onShip.classList.add('placed');
   };
 
   const dragShip = (event) => {
@@ -108,6 +108,7 @@ const gameloop = (() => {
     }
 
     function onMouseMove(event) {
+      onShip.classList.remove('placed');
       moveAt(event.pageX, event.pageY);
     }
     document.addEventListener('mousemove', onMouseMove);
