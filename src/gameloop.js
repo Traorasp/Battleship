@@ -54,7 +54,42 @@ const gameloop = (() => {
     const destroyerX = document.querySelector('.destroyer').getBoundingClientRect().x;
     const destroyerY = document.querySelector('.destroyer').getBoundingClientRect().y;
 
-    if (onShip.getBoundingClientRect().bottom <= 558) {
+    let canPlace = true;
+
+    for (let i = 0; i < 5; i += 1) {
+      let target;
+      switch (i) {
+        case 0:
+          target = document.querySelector('.carrier');
+          break;
+        case 1:
+          target = document.querySelector('.battleship');
+          break;
+        case 2:
+          target = document.querySelector('.cruiser');
+          break;
+        case 3:
+          target = document.querySelector('.submarine');
+          break;
+        default:
+          target = document.querySelector('.destroyer');
+          break;
+      }
+      if (target !== onShip
+      && ((Math.abs(target.getBoundingClientRect().x - onShip.getBoundingClientRect().x) < 100
+      && (target.getBoundingClientRect().bottom > onShip.getBoundingClientRect().top
+      && onShip.getBoundingClientRect().bottom >= target.getBoundingClientRect().top
+      ))
+      || (Math.abs(target.getBoundingClientRect().x - onShip.getBoundingClientRect().x) < 100
+      && (Math.abs(target.getBoundingClientRect().bottom - onShip.getBoundingClientRect().top) < 50
+      || Math.abs(onShip.getBoundingClientRect().bottom - target.getBoundingClientRect().top) < 50
+      ))
+      )) {
+        canPlace = false;
+      }
+    }
+
+    if (onShip.getBoundingClientRect().bottom <= 558 && canPlace) {
       onShip.style.left = `${droppable.getBoundingClientRect().x}px`;
       onShip.style.top = `${droppable.getBoundingClientRect().y + 8}px`;
       onShip.classList.add('placed');
