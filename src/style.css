@@ -1,3 +1,8 @@
+.side {
+    display: grid;
+    grid-template: 1fr / 1fr .25fr;
+}
+
 .board {
     display: grid;
     grid-template: repeat(11, 50px) / repeat(11, 50px);
@@ -38,13 +43,56 @@
 }
 
 .miss {
-    background-color: gray;
+    background-color: rgb(59, 193, 255);
 }
 
 .sunk-part {
-    background-color: yellow;
+    background-color: red;
 }
 
 .sunk { 
-    background-color: red;
+    background-color: black;
+}
+
+#ship-holder {
+    width: 250px;
+    height: 550px;
+    background-color: rgb(195, 195, 195);
+    display: flex;
+    gap: 50px;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 25px;
+    box-sizing: border-box;
+}
+
+.carrier, .battleship, .cruiser, .submarine, .destroyer  {
+    background-color: black;
+}
+
+.carrier {
+    width: 50px;
+    height: 250px;
+}
+
+.battleship {
+    width: 50px;
+    height: 200px;
+}
+
+.cruiser {
+    width: 50px;
+    height: 150px;
+}
+
+.submarine {
+    width: 50px;
+    height: 100px;
+}
+
+.destroyer {
+    width: 50px;
+    height: 50px;
 }

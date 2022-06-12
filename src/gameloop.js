@@ -5,6 +5,8 @@ const gameloop = (() => {
   const boardOne = Gameboard();
   const boardTwo = Gameboard();
 
+  const gameStart = false;
+
   boardOne.placeShip([1, 1, 1], [1, 2, 3]);
   boardOne.placeShip([7, 8, 9], [1, 1, 1]);
   boardOne.placeShip([5, 5], [8, 9]);
@@ -37,6 +39,94 @@ const gameloop = (() => {
         p1.isTurn();
       }
     }
+  };
+
+  const dragShip = (event) => {
+    let onShip;
+
+    console.log(event.currentTarget.classList[0]);
+    switch (event.currentTarget.classList[0]) {
+      case 'carrier':
+        onShip = document.querySelector('.carrier');
+        break;
+      case 'battleship':
+        onShip = document.querySelector('.battleship');
+        break;
+      case 'cruiser':
+        onShip = document.querySelector('.cruiser');
+        break;
+      case 'submarine':
+        onShip = document.querySelector('.submarine');
+        break;
+      default:
+        onShip = document.querySelector('.destroyer');
+        break;
+    }
+
+    const shiftX = event.clientX - onShip.getBoundingClientRect().left;
+    const shiftY = event.clientY - onShip.getBoundingClientRect().top;
+
+    onShip.style.position = 'absolute';
+    onShip.style.zIndex = 1000;
+    document.body.append(onShip);
+
+    moveAt(event.pageX, event.pageY);
+
+    // moves the ball at (pageX, pageY) coordinates
+    // taking initial shifts into account
+    function moveAt(pageX, pageY) {
+      onShip.style.left = `${pageX - shiftX}px`;
+      onShip.style.top = `${pageY - shiftY}px`;
+    }
+
+    function onMouseMove(event) {
+      moveAt(event.pageX, event.pageY);
+    }
+
+    // move the ball on mousemove
+    document.addEventListener('mousemove', onMouseMove);
+
+    // drop the ball, remove unneeded handlers
+    onShip.onmouseup = function () {
+      document.removeEventListener('mousemove', onMouseMove);
+      onShip.onmouseup = null;
+    };
+  };
+
+  const shipSetUp = (side) => {
+    const shipHolder = document.createElement('div');
+    shipHolder.setAttribute('id', 'ship-holder');
+    side.appendChild(shipHolder);
+
+    const carrier = document.createElement('div');
+    carrier.classList.add('carrier');
+    carrier.onmousedown = dragShip;
+    carrier.ondragstart = () => false;
+    shipHolder.appendChild(carrier);
+
+    const battleship = document.createElement('div');
+    battleship.classList.add('battleship');
+    battleship.onmousedown = dragShip;
+    battleship.ondragstart = () => false;
+    shipHolder.appendChild(battleship);
+
+    const cruiser = document.createElement('div');
+    cruiser.classList.add('cruiser');
+    cruiser.onmousedown = dragShip;
+    cruiser.ondragstart = () => false;
+    shipHolder.appendChild(cruiser);
+
+    const submarine = document.createElement('div');
+    submarine.classList.add('submarine');
+    submarine.onmousedown = dragShip;
+    submarine.ondragstart = () => false;
+    shipHolder.appendChild(submarine);
+
+    const destroyer = document.createElement('div');
+    destroyer.classList.add('destroyer');
+    destroyer.onmousedown = dragShip;
+    destroyer.ondragstart = () => false;
+    shipHolder.appendChild(destroyer);
   };
 
   for (let i = 1; i <= 2; i += 1) {
@@ -86,6 +176,8 @@ const gameloop = (() => {
         });
       }
     }
+
+    if (i === 1) shipSetUp(side);
   }
 })();
 
