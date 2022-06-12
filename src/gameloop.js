@@ -39,21 +39,7 @@ const gameloop = (() => {
     }
   };
 
-  const leaveDroppable = (droppable, onShip) => {
-  };
-
   const enterDroppable = (droppable, onShip) => {
-    const carrierX = document.querySelector('.carrier').getBoundingClientRect().x;
-    const carrierY = document.querySelector('.carrier').getBoundingClientRect().y;
-    const battleshipX = document.querySelector('.battleship').getBoundingClientRect().x;
-    const battleshipY = document.querySelector('.battleship').getBoundingClientRect().y;
-    const cruiserX = document.querySelector('.cruiser').getBoundingClientRect().x;
-    const cruiserY = document.querySelector('.cruiser').getBoundingClientRect().y;
-    const submarineX = document.querySelector('.submarine').getBoundingClientRect().x;
-    const submarineY = document.querySelector('.submarine').getBoundingClientRect().y;
-    const destroyerX = document.querySelector('.destroyer').getBoundingClientRect().x;
-    const destroyerY = document.querySelector('.destroyer').getBoundingClientRect().y;
-
     let canPlace = true;
 
     for (let i = 0; i < 5; i += 1) {
@@ -89,9 +75,13 @@ const gameloop = (() => {
       }
     }
 
-    if (onShip.getBoundingClientRect().bottom <= 558 && canPlace) {
+    const isHor = (Array.from(onShip.classList).find((val) => val === 'hor') === 'hor');
+
+    if (((isHor && onShip.getBoundingClientRect().right <= 558)
+    || (!isHor && onShip.getBoundingClientRect().bottom <= 558))
+    && canPlace) {
       onShip.style.left = `${droppable.getBoundingClientRect().x}px`;
-      onShip.style.top = `${droppable.getBoundingClientRect().y + 8}px`;
+      onShip.style.top = `${droppable.getBoundingClientRect().y}px`;
       onShip.classList.add('placed');
     }
   };
@@ -103,26 +93,18 @@ const gameloop = (() => {
     switch (event.currentTarget.classList[0]) {
       case 'carrier':
         onShip = document.querySelector('.carrier');
-        shift = 125;
         break;
       case 'battleship':
         onShip = document.querySelector('.battleship');
-        shift = 100;
-
         break;
       case 'cruiser':
         onShip = document.querySelector('.cruiser');
-        shift = 75;
-
         break;
       case 'submarine':
         onShip = document.querySelector('.submarine');
-        shift = 50;
-
         break;
       default:
         onShip = document.querySelector('.destroyer');
-        shift = 25;
         break;
     }
 
@@ -157,7 +139,12 @@ const gameloop = (() => {
       const elemBelow = document.elementFromPoint(xLoc, yLoc);
       onShip.hidden = false;
 
-      if (!elemBelow) { return; }
+      if (!elemBelow || elemBelow.classList[3] !== 'droppable') {
+        onShip.style.position = 'static';
+        const shipHolder = document.getElementById('ship-holder');
+        shipHolder.appendChild(onShip);
+        return;
+      }
 
       const droppableBelow = elemBelow.closest('.droppable');
 
@@ -173,10 +160,24 @@ const gameloop = (() => {
     };
   };
 
+  const rotateShips = () => {
+    const shipHolder = document.getElementById('ship-holder');
+    shipHolder.classList.toggle('flip');
+    for (let i = 1; i < document.getElementById('ship-holder').children.length; i += 1) {
+      document.getElementById('ship-holder').children[i].classList.toggle('hor');
+    }
+  };
+
   const shipSetUp = (side) => {
     const shipHolder = document.createElement('div');
     shipHolder.setAttribute('id', 'ship-holder');
     side.appendChild(shipHolder);
+
+    const rotateBtn = document.createElement('button');
+    rotateBtn.textContent = 'Rotate';
+    rotateBtn.classList.add('rotateBtn');
+    rotateBtn.onclick = rotateShips;
+    shipHolder.appendChild(rotateBtn);
 
     const carrier = document.createElement('div');
     carrier.classList.add('carrier', 'ship');

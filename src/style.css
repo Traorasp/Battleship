@@ -1,6 +1,6 @@
 .side {
-    display: grid;
-    grid-template: 1fr / 1fr .25fr;
+    display: flex;
+    gap: 50px;
 }
 
 .board {
@@ -55,7 +55,7 @@
 }
 
 #ship-holder {
-    width: 250px;
+    width: 550px;
     height: 550px;
     background-color: rgb(195, 195, 195);
     display: flex;
@@ -68,8 +68,14 @@
     box-sizing: border-box;
 }
 
+#ship-holder.flip{
+    flex-direction: row;
+}
+
 .carrier, .battleship, .cruiser, .submarine, .destroyer  {
     background-color: black;
+    align-items: none;
+    justify-content: center;
 }
 
 .carrier {
@@ -77,9 +83,19 @@
     height: 250px;
 }
 
+.carrier.hor{
+    width: 250px;
+    height: 50px;
+}
+
 .battleship {
     width: 50px;
     height: 200px;
+}
+
+.battleship.hor {
+    width: 200px;
+    height: 50px;
 }
 
 .cruiser {
@@ -87,9 +103,19 @@
     height: 150px;
 }
 
+.cruiser.hor {
+    width: 150px;
+    height: 50px;
+}
+
 .submarine {
     width: 50px;
     height: 100px;
+}
+
+.submarine.hor {
+    width: 100px;
+    height: 50px;
 }
 
 .destroyer {
@@ -99,4 +125,11 @@
 
 .placed {
     background-color: red;
+}
+
+.rotateBtn {
+    position: relative;
+    width: 100px;
+    height: 50px;
+    font-size: 30px;
 }
