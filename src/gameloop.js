@@ -22,8 +22,6 @@ const gameloop = (() => {
   const p1 = Player(boardOne);
   const p2 = Player(boardTwo);
 
-  p1.isTurn();
-
   const round = (cell) => {
     const x = cell.target.classList[0].slice(1);
     const y = cell.target.classList[1].slice(1);
@@ -41,25 +39,55 @@ const gameloop = (() => {
     }
   };
 
+  const leaveDroppable = (droppable, onShip) => {
+
+  };
+
+  const enterDroppable = (droppable, onShip) => {
+    let shift;
+    switch (onShip.classList[0]) {
+      case 'carrier':
+        shift = 100;
+        break;
+      case 'battleship':
+      case 'cruiser':
+        shift = 50;
+        break;
+      default:
+        shift = 0;
+        break;
+    }
+    onShip.style.left = `${droppable.getBoundingClientRect().x}px`;
+    onShip.style.top = `${droppable.getBoundingClientRect().y - shift}px`;
+  };
+
   const dragShip = (event) => {
     let onShip;
+    let shift;
 
-    console.log(event.currentTarget.classList[0]);
     switch (event.currentTarget.classList[0]) {
       case 'carrier':
         onShip = document.querySelector('.carrier');
+        shift = 125;
         break;
       case 'battleship':
         onShip = document.querySelector('.battleship');
+        shift = 100;
+
         break;
       case 'cruiser':
         onShip = document.querySelector('.cruiser');
+        shift = 75;
+
         break;
       case 'submarine':
         onShip = document.querySelector('.submarine');
+        shift = 50;
+
         break;
       default:
         onShip = document.querySelector('.destroyer');
+        shift = 25;
         break;
     }
 
@@ -82,14 +110,32 @@ const gameloop = (() => {
     function onMouseMove(event) {
       moveAt(event.pageX, event.pageY);
     }
-
-    // move the ball on mousemove
     document.addEventListener('mousemove', onMouseMove);
 
-    // drop the ball, remove unneeded handlers
-    onShip.onmouseup = function () {
+    let currentDroppable = null;
+
+    onShip.onmouseup = () => {
       document.removeEventListener('mousemove', onMouseMove);
       onShip.onmouseup = null;
+      const xLoc = Math.round(25 + onShip.getBoundingClientRect().left);
+      const yLoc = shift + onShip.getBoundingClientRect().top;
+      onShip.hidden = true;
+      const elemBelow = document.elementFromPoint(xLoc, yLoc);
+      onShip.hidden = false;
+
+      if (!elemBelow) { return; }
+
+      const droppableBelow = elemBelow.closest('.droppable');
+
+      if (currentDroppable !== droppableBelow) {
+        if (currentDroppable) {
+          leaveDroppable(currentDroppable, onShip);
+        }
+        currentDroppable = droppableBelow;
+        if (currentDroppable) {
+          enterDroppable(currentDroppable, onShip);
+        }
+      }
     };
   };
 
@@ -171,9 +217,12 @@ const gameloop = (() => {
         const cell = document.createElement('div');
         cell.classList.add(`X${x}`, `Y${y}`, `B${player}`);
         grid.appendChild(cell);
-        cell.addEventListener('click', (e) => {
-          round(e);
-        });
+        if (i === 1) {
+          cell.classList.add('droppable');
+          cell.addEventListener('click', (e) => {
+            round(e);
+          });
+        }
       }
     }
 
