@@ -43,9 +43,22 @@ const gameloop = (() => {
   };
 
   const enterDroppable = (droppable, onShip) => {
-    onShip.style.left = `${droppable.getBoundingClientRect().x}px`;
-    onShip.style.top = `${droppable.getBoundingClientRect().y}px`;
-    onShip.classList.add('placed');
+    const carrierX = document.querySelector('.carrier').getBoundingClientRect().x;
+    const carrierY = document.querySelector('.carrier').getBoundingClientRect().y;
+    const battleshipX = document.querySelector('.battleship').getBoundingClientRect().x;
+    const battleshipY = document.querySelector('.battleship').getBoundingClientRect().y;
+    const cruiserX = document.querySelector('.cruiser').getBoundingClientRect().x;
+    const cruiserY = document.querySelector('.cruiser').getBoundingClientRect().y;
+    const submarineX = document.querySelector('.submarine').getBoundingClientRect().x;
+    const submarineY = document.querySelector('.submarine').getBoundingClientRect().y;
+    const destroyerX = document.querySelector('.destroyer').getBoundingClientRect().x;
+    const destroyerY = document.querySelector('.destroyer').getBoundingClientRect().y;
+
+    if (onShip.getBoundingClientRect().bottom <= 558) {
+      onShip.style.left = `${droppable.getBoundingClientRect().x}px`;
+      onShip.style.top = `${droppable.getBoundingClientRect().y + 8}px`;
+      onShip.classList.add('placed');
+    }
   };
 
   const dragShip = (event) => {
@@ -103,7 +116,7 @@ const gameloop = (() => {
     onShip.onmouseup = () => {
       document.removeEventListener('mousemove', onMouseMove);
       onShip.onmouseup = null;
-      const xLoc = Math.round(25 + onShip.getBoundingClientRect().left);
+      const xLoc = 25 + onShip.getBoundingClientRect().left;
       const yLoc = 25 + onShip.getBoundingClientRect().top;
       onShip.hidden = true;
       const elemBelow = document.elementFromPoint(xLoc, yLoc);
@@ -131,31 +144,31 @@ const gameloop = (() => {
     side.appendChild(shipHolder);
 
     const carrier = document.createElement('div');
-    carrier.classList.add('carrier');
+    carrier.classList.add('carrier', 'ship');
     carrier.onmousedown = dragShip;
     carrier.ondragstart = () => false;
     shipHolder.appendChild(carrier);
 
     const battleship = document.createElement('div');
-    battleship.classList.add('battleship');
+    battleship.classList.add('battleship', 'ship');
     battleship.onmousedown = dragShip;
     battleship.ondragstart = () => false;
     shipHolder.appendChild(battleship);
 
     const cruiser = document.createElement('div');
-    cruiser.classList.add('cruiser');
+    cruiser.classList.add('cruiser', 'ship');
     cruiser.onmousedown = dragShip;
     cruiser.ondragstart = () => false;
     shipHolder.appendChild(cruiser);
 
     const submarine = document.createElement('div');
-    submarine.classList.add('submarine');
+    submarine.classList.add('submarine', 'ship');
     submarine.onmousedown = dragShip;
     submarine.ondragstart = () => false;
     shipHolder.appendChild(submarine);
 
     const destroyer = document.createElement('div');
-    destroyer.classList.add('destroyer');
+    destroyer.classList.add('destroyer', 'ship');
     destroyer.onmousedown = dragShip;
     destroyer.ondragstart = () => false;
     shipHolder.appendChild(destroyer);
