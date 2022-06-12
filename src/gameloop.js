@@ -41,6 +41,7 @@ const gameloop = (() => {
 
   const enterDroppable = (droppable, onShip) => {
     let canPlace = true;
+    const isHor = (Array.from(onShip.classList).find((val) => val === 'hor') === 'hor');
 
     for (let i = 0; i < 5; i += 1) {
       let target;
@@ -61,21 +62,20 @@ const gameloop = (() => {
           target = document.querySelector('.destroyer');
           break;
       }
+      const targetLoc = target.getBoundingClientRect();
+      const shipLoc = onShip.getBoundingClientRect();
       if (target !== onShip
-      && ((Math.abs(target.getBoundingClientRect().x - onShip.getBoundingClientRect().x) < 100
-      && (target.getBoundingClientRect().bottom > onShip.getBoundingClientRect().top
-      && onShip.getBoundingClientRect().bottom >= target.getBoundingClientRect().top
-      ))
-      || (Math.abs(target.getBoundingClientRect().x - onShip.getBoundingClientRect().x) < 100
-      && (Math.abs(target.getBoundingClientRect().bottom - onShip.getBoundingClientRect().top) < 50
-      || Math.abs(onShip.getBoundingClientRect().bottom - target.getBoundingClientRect().top) < 50
-      ))
-      )) {
+          && ((((Math.abs(shipLoc.bottom - targetLoc.top) <= 50)
+          || (Math.abs(shipLoc.top - targetLoc.bottom) <= 50))
+          && ((Math.abs(shipLoc.left - targetLoc.right) <= 50)
+          || (Math.abs(shipLoc.right - targetLoc.left) <= 50)))
+          || ((Math.abs(shipLoc.top - targetLoc.top) < 75
+          || Math.abs(shipLoc.bottom - targetLoc.bottom) < 75)
+          && (Math.abs(shipLoc.left - targetLoc.left) < 75
+          || Math.abs(shipLoc.right - targetLoc.right) < 75)))) {
         canPlace = false;
       }
     }
-
-    const isHor = (Array.from(onShip.classList).find((val) => val === 'hor') === 'hor');
 
     if (((isHor && onShip.getBoundingClientRect().right <= 558)
     || (!isHor && onShip.getBoundingClientRect().bottom <= 558))
