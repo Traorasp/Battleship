@@ -20,44 +20,51 @@ const Gameboard = () => {
     const usedCord = [];
     for (let i = 1; i <= 5; i += 1) {
       const ship = createShip(i);
-      const isHor = Math.random() * 2 === 0;
+      const isHor = Math.round(Math.random()) === 0;
       let startX;
       let startY;
-      const freeCord = false;
+      let freeCord = false;
       while (!freeCord) {
-        startX = isHor ? Math.random() * (10 - i) : Math.random() * 10;
-        startY = isHor ? Math.random() * 10 : Math.random() * (10 - i);
-        usedCord.forEach((cord) => {
-          if (cord !== [startX, startY] && cord !== [startX + i - 1, startY + i - 1]) {
-            freeCord = true;
-          }
-        });
+        freeCord = true;
+        startX = isHor ? Math.round(Math.random() * (10 - i)) : Math.round(Math.random() * 10);
+        startY = isHor ? Math.round(Math.random() * 10) : Math.round(Math.random() * (10 - i));
+        const endX = isHor ? startX + i - 1 : startX;
+        const endY = isHor ? startY : startY + i - 1;
+
+        if (usedCord !== []) {
+          usedCord.forEach((cord) => {
+            if ((cord[0] === startX && cord[1] === startY)
+              || (cord[0] === endX && cord[1] === endY)) {
+              freeCord = false;
+            }
+          });
+        }
       }
-      let X;
-      let Y;
+      const X = [];
+      const Y = [];
       for (let a = 0; a < i; a += 1) {
         if (isHor) {
-          X[a] = startX + 1;
-          Y[a] = startY;
+          X.push(startX + a);
+          Y.push(startY);
         } else {
-          X[a] = startX;
-          Y[a] = startY + 1;
+          X.push(startX);
+          Y.push(startY + a);
         }
       }
       if (isHor) {
         usedCord.push([X[0] - 1, Y[0] - 1]);
         usedCord.push([X[0] - 1, Y[0]]);
         usedCord.push([X[0] - 1, Y[0] + 1]);
-        usedCord.push([X[i] + 1, Y[i] - 1]);
-        usedCord.push([X[i] + 1, Y[i]]);
-        usedCord.push([X[i] + 1, Y[i] + 1]);
+        usedCord.push([X[i - 1] + 1, Y[i - 1] - 1]);
+        usedCord.push([X[i - 1] + 1, Y[i - 1]]);
+        usedCord.push([X[i - 1] + 1, Y[i - 1] + 1]);
       } else {
         usedCord.push([X[0] - 1, Y[0] - 1]);
         usedCord.push([X[0], Y[0] - 1]);
         usedCord.push([X[0] + 1, Y[0] - 1]);
-        usedCord.push([X[i] - 1, Y[i] + 1]);
-        usedCord.push([X[i], Y[i] + 1]);
-        usedCord.push([X[i] + 1, Y[i] + 1]);
+        usedCord.push([X[i - 1] - 1, Y[i - 1] + 1]);
+        usedCord.push([X[i - 1], Y[i - 1] + 1]);
+        usedCord.push([X[i - 1] + 1, Y[i - 1] + 1]);
       }
       for (let k = 0; k < i; k += 1) {
         grid[X[k]][Y[k]] = { ship, part: k };
@@ -65,6 +72,10 @@ const Gameboard = () => {
           usedCord.push([X[k], Y[k] - 1]);
           usedCord.push([X[k], Y[k]]);
           usedCord.push([X[k], Y[k] + 1]);
+        } else {
+          usedCord.push([X[k] - 1, Y[k]]);
+          usedCord.push([X[k], Y[k]]);
+          usedCord.push([X[k] + 1, Y[k]]);
         }
       }
     }

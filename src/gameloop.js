@@ -164,16 +164,17 @@ const gameloop = (() => {
   };
 
   const start = () => {
-    const canStart = (document.querySelectorAll('.placed').length >= 5);
-    if (!canStart) return;
+    if (!document.querySelectorAll('.placed').length >= 5) return;
+    const allShips = (document.querySelectorAll('.ship'));
     const shipHolder = document.getElementById('ship-holder');
-    for (let i = 2; i < shipHolder.children.length; i += 1) {
-      const ship = shipHolder.children[i];
-      let xCord;
-      let yCord;
+
+    for (let i = 0; i < allShips.length; i += 1) {
+      const ship = allShips[i];
+      const xCord = [];
+      const yCord = [];
       const isHor = (Array.from(ship.classList).find((val) => val === 'hor') === 'hor');
-      const startX = ship.getBoundingClientRect().left;
-      const startY = ship.getBoundingClientRect().top;
+      const startX = Math.round((ship.getBoundingClientRect().left - 8) / 50);
+      const startY = Math.round((ship.getBoundingClientRect().top - 8) / 50);
       let size;
       switch (ship.classList[0]) {
         case 'carrier':
@@ -194,18 +195,16 @@ const gameloop = (() => {
       }
       for (let k = 0; k < size; k += 1) {
         if (isHor) {
-          xCord[k] = startX + k;
-          yCord[k] = startY;
+          xCord.push(startX + k);
+          yCord.push(startY);
         } else {
-          xCord[k] = startX;
-          yCord[k] = startY + k;
+          xCord.push(startX);
+          yCord.push(startY + k);
         }
       }
       boardTwo.placeShip(xCord, yCord);
     }
     boardOne.placeShipsAI();
-    console.table(boardOne.grid);
-    console.table(boardTwo.grid);
 
     shipHolder.innerHTML = '';
     document.querySelectorAll('.placed').forEach((values) => values.remove());
