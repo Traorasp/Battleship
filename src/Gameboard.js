@@ -16,6 +16,60 @@ const Gameboard = () => {
     }
   };
 
+  const placeShipsAI = () => {
+    const usedCord = [];
+    for (let i = 1; i <= 5; i += 1) {
+      const ship = createShip(i);
+      const isHor = Math.random() * 2 === 0;
+      let startX;
+      let startY;
+      const freeCord = false;
+      while (!freeCord) {
+        startX = isHor ? Math.random() * (10 - i) : Math.random() * 10;
+        startY = isHor ? Math.random() * 10 : Math.random() * (10 - i);
+        usedCord.forEach((cord) => {
+          if (cord !== [startX, startY] && cord !== [startX + i - 1, startY + i - 1]) {
+            freeCord = true;
+          }
+        });
+      }
+      let X;
+      let Y;
+      for (let a = 0; a < i; a += 1) {
+        if (isHor) {
+          X[a] = startX + 1;
+          Y[a] = startY;
+        } else {
+          X[a] = startX;
+          Y[a] = startY + 1;
+        }
+      }
+      if (isHor) {
+        usedCord.push([X[0] - 1, Y[0] - 1]);
+        usedCord.push([X[0] - 1, Y[0]]);
+        usedCord.push([X[0] - 1, Y[0] + 1]);
+        usedCord.push([X[i] + 1, Y[i] - 1]);
+        usedCord.push([X[i] + 1, Y[i]]);
+        usedCord.push([X[i] + 1, Y[i] + 1]);
+      } else {
+        usedCord.push([X[0] - 1, Y[0] - 1]);
+        usedCord.push([X[0], Y[0] - 1]);
+        usedCord.push([X[0] + 1, Y[0] - 1]);
+        usedCord.push([X[i] - 1, Y[i] + 1]);
+        usedCord.push([X[i], Y[i] + 1]);
+        usedCord.push([X[i] + 1, Y[i] + 1]);
+      }
+      for (let k = 0; k < i; k += 1) {
+        grid[X[k]][Y[k]] = { ship, part: k };
+        if (isHor) {
+          usedCord.push([X[k], Y[k] - 1]);
+          usedCord.push([X[k], Y[k]]);
+          usedCord.push([X[k], Y[k] + 1]);
+        }
+      }
+    }
+  };
+
   const updateGrid = () => {
     let x = 0;
     let y = 0;
@@ -139,6 +193,7 @@ const Gameboard = () => {
     allSunk,
     cellStatus,
     updateBoard,
+    placeShipsAI,
   };
 };
 

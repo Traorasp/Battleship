@@ -4,23 +4,18 @@ import Gameboard from './Gameboard.js';
 const gameloop = (() => {
   const boardOne = Gameboard();
   const boardTwo = Gameboard();
+  const winnerDisplay = document.createElement('div');
+  winnerDisplay.classList.add('winnerDisplay', 'hide');
+  document.body.appendChild(winnerDisplay);
 
   const gameStart = false;
 
-  boardOne.placeShip([1, 1, 1], [1, 2, 3]);
-  boardOne.placeShip([7, 8, 9], [1, 1, 1]);
-  boardOne.placeShip([5, 5], [8, 9]);
-  boardOne.placeShip([8], [3]);
-  boardOne.placeShip([2, 3], [6, 6]);
-
-  boardTwo.placeShip([1, 1, 1], [1, 2, 3]);
-  boardTwo.placeShip([1, 2, 3], [1, 1, 1]);
-  boardTwo.placeShip([5, 5], [8, 9]);
-  boardTwo.placeShip([8], [3]);
-  boardTwo.placeShip([2, 3], [6, 6]);
-
   const p1 = Player(boardOne);
   const p2 = Player(boardTwo);
+
+  const showWinner = () => {
+    console.log(boardOne.allSunk());
+  };
 
   const round = (cell) => {
     const x = cell.target.classList[0].slice(1);
@@ -35,6 +30,9 @@ const gameloop = (() => {
         const aiShot = p2.aiMove();
         boardTwo.updateBoard(aiShot[0], aiShot[1], 2);
         p1.isTurn();
+      }
+      if (boardOne.allSunk() || boardTwo.allSunk()) {
+        showWinner();
       }
     }
   };
@@ -149,9 +147,6 @@ const gameloop = (() => {
       const droppableBelow = elemBelow.closest('.droppable');
 
       if (currentDroppable !== droppableBelow) {
-        if (currentDroppable) {
-          leaveDroppable(currentDroppable, onShip);
-        }
         currentDroppable = droppableBelow;
         if (currentDroppable) {
           enterDroppable(currentDroppable, onShip);
@@ -163,15 +158,70 @@ const gameloop = (() => {
   const rotateShips = () => {
     const shipHolder = document.getElementById('ship-holder');
     shipHolder.classList.toggle('flip');
-    for (let i = 1; i < document.getElementById('ship-holder').children.length; i += 1) {
+    for (let i = 2; i < document.getElementById('ship-holder').children.length; i += 1) {
       document.getElementById('ship-holder').children[i].classList.toggle('hor');
     }
+  };
+
+  const start = () => {
+    const canStart = (document.querySelectorAll('.placed').length >= 5);
+    if (!canStart) return;
+    const shipHolder = document.getElementById('ship-holder');
+    for (let i = 2; i < shipHolder.children.length; i += 1) {
+      const ship = shipHolder.children[i];
+      let xCord;
+      let yCord;
+      const isHor = (Array.from(ship.classList).find((val) => val === 'hor') === 'hor');
+      const startX = ship.getBoundingClientRect().left;
+      const startY = ship.getBoundingClientRect().top;
+      let size;
+      switch (ship.classList[0]) {
+        case 'carrier':
+          size = 5;
+          break;
+        case 'battleship':
+          size = 4;
+          break;
+        case 'cruiser':
+          size = 3;
+          break;
+        case 'submarine':
+          size = 2;
+          break;
+        default:
+          size = 1;
+          break;
+      }
+      for (let k = 0; k < size; k += 1) {
+        if (isHor) {
+          xCord[k] = startX + k;
+          yCord[k] = startY;
+        } else {
+          xCord[k] = startX;
+          yCord[k] = startY + k;
+        }
+      }
+      boardTwo.placeShip(xCord, yCord);
+    }
+    boardOne.placeShipsAI();
+    console.table(boardOne.grid);
+    console.table(boardTwo.grid);
+
+    shipHolder.innerHTML = '';
+    document.querySelectorAll('.placed').forEach((values) => values.remove());
+    p1.isTurn();
   };
 
   const shipSetUp = (side) => {
     const shipHolder = document.createElement('div');
     shipHolder.setAttribute('id', 'ship-holder');
     side.appendChild(shipHolder);
+
+    const startBtn = document.createElement('button');
+    startBtn.textContent = 'Start';
+    startBtn.classList.add('start');
+    startBtn.onclick = start;
+    shipHolder.appendChild(startBtn);
 
     const rotateBtn = document.createElement('button');
     rotateBtn.textContent = 'Rotate';
