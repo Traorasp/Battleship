@@ -158,7 +158,7 @@ const Gameboard = () => {
         if ((currX !== cellX || (currX === cellX && Math.abs(currY - cellY) < 9))
         && (currY !== cellY || (currY === cellY && Math.abs(currX - cellX) < 9))
         && (Math.abs(currX - cellX) < 2) && (Math.abs(currY - cellY) < 2)) {
-          switch (cell.classList[3]) {
+          switch (cell.classList[4]) {
             case 'miss':
               break;
             case 'sunk':
@@ -169,6 +169,7 @@ const Gameboard = () => {
               checkSides(cell.classList[0].slice(1), cell.classList[1].slice(1), playersBoard);
               break;
             default:
+              receiveAttack(cellX, cellY);
               cell.classList.add('miss');
               break;
           }
