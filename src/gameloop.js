@@ -1,20 +1,53 @@
 import Player from './Player.js';
 import Gameboard from './Gameboard.js';
 
-const gameloop = (() => {
-  const boardOne = Gameboard();
-  const boardTwo = Gameboard();
+const endScreen = (() => {
+  const background = document.createElement('div');
+  background.classList.add('background', 'hide');
+  document.body.appendChild(background);
+
   const winnerDisplay = document.createElement('div');
   winnerDisplay.classList.add('winnerDisplay', 'hide');
   document.body.appendChild(winnerDisplay);
 
-  const gameStart = false;
+  const winner = document.createElement('h1');
+  winner.classList.add('winner');
+  winnerDisplay.appendChild(winner);
+
+  const newGameBtn = document.createElement('button');
+  newGameBtn.classList.add('newGameBtn');
+  newGameBtn.textContent = 'New Game';
+  winnerDisplay.appendChild(newGameBtn);
+
+  const display = (winnerName) => {
+    winnerDisplay.classList.remove('hide');
+    background.classList.remove('hide');
+    winner.textContent = `${winnerName} has won!`;
+  };
+
+  const newGame = () => {
+    document.body.innerHTML = '';
+    winnerDisplay.classList.add('hide');
+    background.classList.add('hide');
+    gameloop();
+  };
+
+  newGameBtn.onclick = newGame;
+
+  return {
+    display,
+  };
+})();
+
+const gameloop = () => {
+  const boardOne = Gameboard();
+  const boardTwo = Gameboard();
 
   const p1 = Player(boardOne);
   const p2 = Player(boardTwo);
 
   const showWinner = () => {
-    console.log(boardOne.allSunk());
+    endScreen.display(boardOne.allSunk() ? 'Player' : 'Computer');
   };
 
   const round = (cell) => {
@@ -67,10 +100,11 @@ const gameloop = (() => {
           || (Math.abs(shipLoc.top - targetLoc.bottom) <= 50))
           && ((Math.abs(shipLoc.left - targetLoc.right) <= 50)
           || (Math.abs(shipLoc.right - targetLoc.left) <= 50)))
-          || ((Math.abs(shipLoc.top - targetLoc.top) < 75
-          || Math.abs(shipLoc.bottom - targetLoc.bottom) < 75)
-          && (Math.abs(shipLoc.left - targetLoc.left) < 75
-          || Math.abs(shipLoc.right - targetLoc.right) < 75)))) {
+
+          || ((Math.abs(shipLoc.top - targetLoc.top) <= 100
+          || Math.abs(shipLoc.bottom - targetLoc.bottom) <= 100)
+          && (Math.abs(shipLoc.left - targetLoc.left) <= 100
+          || Math.abs(shipLoc.right - targetLoc.right) <= 100)))) {
         canPlace = false;
       }
     }
@@ -312,6 +346,8 @@ const gameloop = (() => {
 
     if (i === 1) shipSetUp(side);
   }
-})();
+};
+
+gameloop();
 
 export default gameloop;
