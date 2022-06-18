@@ -31,8 +31,8 @@ const Gameboard = () => {
       let freeCord = false;
       while (!freeCord) {
         freeCord = true;
-        startX = isHor ? Math.round(Math.random() * (11 - i)) : Math.round(Math.random() * 10);
-        startY = isHor ? Math.round(Math.random() * 10) : Math.round(Math.random() * (11 - i));
+        startX = isHor ? Math.floor(Math.random() * (11 - i)) : Math.floor(Math.random() * 10);
+        startY = isHor ? Math.floor(Math.random() * 10) : Math.floor(Math.random() * (11 - i));
         const endX = isHor ? startX + i - 1 : startX;
         const endY = isHor ? startY : startY + i - 1;
 
