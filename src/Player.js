@@ -5,23 +5,29 @@ const Player = (enemyBoard) => {
 
   const attack = (x, y) => {
     if (turn) {
-      turn = !enemyBoard.receiveAttack(x, y);
-      if (!turn) return turn;
+      const result = enemyBoard.receiveAttack(x, y);
+      turn = result === 1 ? true : result === 2;
+      if (result > 1) return true;
     }
-    return true;
+    return false;
   };
 
-  const isTurn = () => {
-    turn = true;
+  const isTurn = () => turn;
+
+  const changeTurn = (newTurn) => {
+    turn = newTurn;
   };
 
   const aiMove = () => {
     let x;
     let y;
-    while (turn) {
+    let canExit = false;
+    while (!canExit) {
       x = Math.floor(Math.random() * 10) + 1;
       y = Math.floor(Math.random() * 10) + 1;
-      turn = !enemyBoard.receiveAttack(x, y);
+      const result = enemyBoard.receiveAttack(x, y);
+      turn = result !== 3;
+      if (result > 1) canExit = true;
     }
     return [x, y];
   };
@@ -30,6 +36,7 @@ const Player = (enemyBoard) => {
     attack,
     isTurn,
     aiMove,
+    changeTurn,
   };
 };
 

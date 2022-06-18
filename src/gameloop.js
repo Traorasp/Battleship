@@ -54,15 +54,19 @@ const gameloop = () => {
     const x = cell.target.classList[0].slice(1);
     const y = cell.target.classList[1].slice(1);
     const playersBoard = cell.target.classList[2].slice(1);
-    if (playersBoard === 'P1' && !p1.attack(x, y)) {
-      if (!boardTwo.allSunk()) {
+    if (playersBoard === 'P1') {
+      if (!boardTwo.allSunk() && p1.isTurn() && p1.attack(x, y)) {
         boardOne.updateBoard(x, y, 1);
-        p2.isTurn();
+        if (!p1.isTurn()) {
+          p2.changeTurn(true);
+        }
       }
-      if (!boardOne.allSunk()) {
+      if (!boardOne.allSunk() && p2.isTurn()) {
         const aiShot = p2.aiMove();
         boardTwo.updateBoard(aiShot[0], aiShot[1], 2);
-        p1.isTurn();
+        if (!p2.isTurn()) {
+          p1.changeTurn(true);
+        }
       }
       if (boardOne.allSunk() || boardTwo.allSunk()) {
         showWinner();
@@ -242,7 +246,7 @@ const gameloop = () => {
 
     shipHolder.innerHTML = '';
     document.querySelectorAll('.placed').forEach((values) => values.remove());
-    p1.isTurn();
+    p1.changeTurn(true);
   };
 
   const shipSetUp = (side) => {

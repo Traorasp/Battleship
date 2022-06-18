@@ -17,6 +17,11 @@ const Gameboard = () => {
   };
 
   const placeShipsAI = () => {
+    for (let i = 0; i < 10; i += 1) {
+      for (let k = 0; k < 10; k += 1) {
+        grid[i][k] = 0;
+      }
+    }
     const usedCord = [];
     for (let i = 1; i <= 5; i += 1) {
       const ship = createShip(i);
@@ -26,8 +31,8 @@ const Gameboard = () => {
       let freeCord = false;
       while (!freeCord) {
         freeCord = true;
-        startX = isHor ? Math.round(Math.random() * (10 - i)) : Math.round(Math.random() * 10);
-        startY = isHor ? Math.round(Math.random() * 10) : Math.round(Math.random() * (10 - i));
+        startX = isHor ? Math.round(Math.random() * (11 - i)) : Math.round(Math.random() * 10);
+        startY = isHor ? Math.round(Math.random() * 10) : Math.round(Math.random() * (11 - i));
         const endX = isHor ? startX + i - 1 : startX;
         const endY = isHor ? startY : startY + i - 1;
 
@@ -98,16 +103,16 @@ const Gameboard = () => {
     const y = yCord - 1;
 
     if (grid[x][y] <= -1 || (grid[x][y] !== 0 && grid[x][y].ship.cond[grid[x][y].part] === 0)) {
-      return false;
+      return 1;
     }
     if (grid[x][y] !== 0) {
       grid[x][y].ship.hit(grid[x][y].part);
       grid[x][y].part = -2;
       updateGrid();
-    } else {
-      grid[x][y] = -1;
+      return 2;
     }
-    return true;
+    grid[x][y] = -1;
+    return 3;
   };
 
   const allSunk = () => {
